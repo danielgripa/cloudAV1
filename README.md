@@ -43,10 +43,6 @@ Para configurar o ambiente de desenvolvimento e executar a aplicação localment
    mvn spring-boot:run
    ```
 
-## Documentação da API
-
-A aplicação possui uma API RESTful para interação com o sistema. Para acessar a documentação completa dos endpoints, consulte o link: [www.projeto.edu.br/api/docs](http://www.projeto.edu.br/api/docs).
-
 ## Como Contribuir
 
 Se você deseja contribuir com o projeto, siga os passos abaixo:
