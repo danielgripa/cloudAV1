@@ -21,6 +21,7 @@ public class EnderecoService {
         // Adicione validações específicas de unicidade, se necessário
         Endereco endereco = convertToEntity(enderecoDTO);
         Endereco novoEndereco = enderecoRepository.save(endereco);
+        enderecoRepository.flush();
         return convertToDTO(novoEndereco);
     }
 
@@ -65,6 +66,7 @@ public class EnderecoService {
     // Converter DTO para Entidade
     private Endereco convertToEntity(EnderecoDTO enderecoDTO) {
         Endereco endereco = new Endereco();
+        endereco.setId(enderecoDTO.getId());
         endereco.setStreet(enderecoDTO.getStreet());
         endereco.setNumber(enderecoDTO.getNumber());
         endereco.setNeighborhood(enderecoDTO.getNeighborhood());
@@ -77,6 +79,7 @@ public class EnderecoService {
     // Converter Entidade para DTO
     private EnderecoDTO convertToDTO(Endereco endereco) {
         EnderecoDTO enderecoDTO = new EnderecoDTO();
+        enderecoDTO.setId(endereco.getId());
         enderecoDTO.setStreet(endereco.getStreet());
         enderecoDTO.setNumber(endereco.getNumber());
         enderecoDTO.setNeighborhood(endereco.getNeighborhood());

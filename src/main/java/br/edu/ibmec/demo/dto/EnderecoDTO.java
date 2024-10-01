@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 
 public class EnderecoDTO {
 
+    private Long id;
     @NotBlank(message = "Rua é obrigatória")
     @Size(min = 3, max = 255, message = "Rua deve ter entre 3 e 255 caracteres")
     private String street;
@@ -80,4 +81,8 @@ public class EnderecoDTO {
         this.zipCode = zipCode;
     }
 
+    public void setId(Long id) { this.id = id;
+    }
+
+    public Long getId() { return id; }
 }
