@@ -1,6 +1,7 @@
 package br.edu.ibmec.demo.service;
 
 import br.edu.ibmec.demo.dto.ClienteDTO;
+import br.edu.ibmec.demo.exception.BadRequestException;
 import br.edu.ibmec.demo.exception.ResourceNotFoundException;
 import br.edu.ibmec.demo.model.Cliente;
 import br.edu.ibmec.demo.repository.ClienteRepository;
@@ -75,7 +76,7 @@ public class ClienteServiceTest {
         when(clienteRepository.findByEmail(clienteDTO.getEmail())).thenReturn(Optional.of(new Cliente()));
 
         // Verifica se a exceção é lançada corretamente
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(BadRequestException.class, () -> {
             clienteService.addCliente(clienteDTO);
         });
 
@@ -97,7 +98,7 @@ public class ClienteServiceTest {
         when(clienteRepository.findByCpf(clienteDTO.getCpf())).thenReturn(Optional.of(new Cliente()));
 
         // Verifica se a exceção é lançada corretamente
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(BadRequestException.class, () -> {
             clienteService.addCliente(clienteDTO);
         });
 
@@ -237,7 +238,7 @@ public class ClienteServiceTest {
         clienteDTO.setPhone("(11) 99999-9999");
 
         // Verifica se a exceção é lançada corretamente ao tentar adicionar cliente com idade menor que 18
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(BadRequestException.class, () -> {
             clienteService.addCliente(clienteDTO);
         });
 
