@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,6 +29,8 @@ public class ClienteDTO {
 
     @Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}", message = "Telefone deve seguir o padrão (XX) XXXXX-XXXX")
     private String phone;
+
+    private List<EnderecoDTO> enderecos;
 
     // Construtor padrão
     public ClienteDTO() {
@@ -78,6 +81,14 @@ public class ClienteDTO {
     public boolean isAgeValid() {
         if (this.birthDate == null) return false;
         return Period.between(this.birthDate, LocalDate.now()).getYears() >= 18;
+    }
+
+    public List<EnderecoDTO> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(List<EnderecoDTO> enderecos) {
+        this.enderecos = enderecos;
     }
 
 }

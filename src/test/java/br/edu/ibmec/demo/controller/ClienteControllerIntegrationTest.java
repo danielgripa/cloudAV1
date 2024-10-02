@@ -15,6 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -93,6 +94,54 @@ public class ClienteControllerIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors.cpf").value("O CPF deve seguir o padrão XXX.XXX.XXX-XX"));
     }
+    @Test
+    public void testAddExistingEnderecoToCliente_ClienteNotFound() throws Exception {
+        // IDs fictícios para teste - cliente inexistente
+        Long clienteId = 999L;
+        Long enderecoId = 1L;
+
+        // Executar a requisição POST para associar endereço ao cliente inexistente
+        mockMvc.perform(post("/api/clientes/" + clienteId + "/enderecos/" + enderecoId))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Cliente não encontrado com o ID: " + clienteId));
+    }
+
+    @Test
+    public void testAddExistingEnderecoToCliente_EnderecoNotFound() throws Exception {
+        // IDs fictícios para teste - endereço inexistente
+        Long clienteId = 1L;
+        Long enderecoId = 999L;
+
+        // Executar a requisição POST para associar endereço inexistente ao cliente
+        mockMvc.perform(post("/api/clientes/" + clienteId + "/enderecos/" + enderecoId))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Endereço não encontrado com o ID: " + enderecoId));
+    }
+
+    @Test
+    public void testRemoveEnderecoFromCliente_ClienteNotFound() throws Exception {
+        // IDs fictícios para teste - cliente inexistente
+        Long clienteId = 999L;
+        Long enderecoId = 1L;
+
+        // Executar a requisição DELETE para desassociar endereço do cliente inexistente
+        mockMvc.perform(delete("/api/clientes/" + clienteId + "/enderecos/" + enderecoId))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Cliente não encontrado com o ID: " + clienteId));
+    }
+
+    @Test
+    public void testRemoveEnderecoFromCliente_EnderecoNotFound() throws Exception {
+        // IDs fictícios para teste - endereço inexistente
+        Long clienteId = 1L;
+        Long enderecoId = 999L;
+
+        // Executar a requisição DELETE para desassociar endereço inexistente do cliente
+        mockMvc.perform(delete("/api/clientes/" + clienteId + "/enderecos/" + enderecoId))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Endereço não encontrado com o ID: " + enderecoId));
+    }
+
 
 
     // Função auxiliar para converter o objeto para JSON

@@ -1,12 +1,16 @@
 package br.edu.ibmec.demo.service;
 
 import br.edu.ibmec.demo.dto.EnderecoDTO;
+import br.edu.ibmec.demo.exception.BadRequestException;
 import br.edu.ibmec.demo.exception.ResourceNotFoundException;
+import br.edu.ibmec.demo.model.Cliente;
 import br.edu.ibmec.demo.model.Endereco;
+import br.edu.ibmec.demo.repository.ClienteRepository;
 import br.edu.ibmec.demo.repository.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,18 +19,20 @@ public class EnderecoService {
 
     @Autowired
     private EnderecoRepository enderecoRepository;
+    @Autowired
+    private ClienteRepository clienteRepository;
 
-    // Adicionar um novo endereço
+    // Adicionar novo endereço
     public EnderecoDTO addEndereco(EnderecoDTO enderecoDTO) {
-        // Adicione validações específicas de unicidade, se necessário
+        validarEndereco(enderecoDTO);
         Endereco endereco = convertToEntity(enderecoDTO);
         Endereco novoEndereco = enderecoRepository.save(endereco);
-        enderecoRepository.flush();
         return convertToDTO(novoEndereco);
     }
 
     // Atualizar endereço existente
     public EnderecoDTO updateEndereco(Long id, EnderecoDTO enderecoDetailsDTO) {
+        validarEndereco(enderecoDetailsDTO);
         Endereco enderecoExistente = enderecoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço com ID " + id + " não encontrado"));
 
@@ -63,8 +69,63 @@ public class EnderecoService {
         enderecoRepository.delete(endereco);
     }
 
+    // Associar endereço a um cliente existente
+    public EnderecoDTO adicionarEnderecoAoCliente(Long clienteId, EnderecoDTO enderecoDTO) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com ID: " + clienteId));
+
+        validarEndereco(enderecoDTO);
+        Endereco endereco = convertToEntity(enderecoDTO);
+        endereco.setCliente(cliente);
+
+        Endereco novoEndereco = enderecoRepository.save(endereco);
+        return convertToDTO(novoEndereco);
+    }
+
+    // Validar campos do endereço
+    private void validarEndereco(EnderecoDTO enderecoDTO) {
+        // Validar presença de campos obrigatórios
+        if (enderecoDTO.getStreet() == null || enderecoDTO.getStreet().isEmpty() ||
+                enderecoDTO.getNumber() == null || enderecoDTO.getNumber().isEmpty() ||
+                enderecoDTO.getNeighborhood() == null || enderecoDTO.getNeighborhood().isEmpty() ||
+                enderecoDTO.getCity() == null || enderecoDTO.getCity().isEmpty() ||
+                enderecoDTO.getState() == null || enderecoDTO.getState().isEmpty() ||
+                enderecoDTO.getZipCode() == null || enderecoDTO.getZipCode().isEmpty()) {
+            throw new BadRequestException("Campos obrigatórios ausentes");
+        }
+
+        // Validar tamanho dos campos
+        if (enderecoDTO.getStreet().length() < 3 || enderecoDTO.getStreet().length() > 255 ||
+                enderecoDTO.getNeighborhood().length() < 3 || enderecoDTO.getNeighborhood().length() > 255 ||
+                enderecoDTO.getCity().length() < 3 || enderecoDTO.getCity().length() > 255) {
+            throw new BadRequestException("Campos rua, bairro ou cidade inválidos (mínimo 3, máximo 255 caracteres)");
+        }
+
+        // Validar estado
+        List<String> estadosValidos = Arrays.asList("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+                "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO");
+        if (!estadosValidos.contains(enderecoDTO.getState())) {
+            throw new BadRequestException("Estado inválido");
+        }
+
+        // Validar formato do CEP
+        if (!enderecoDTO.getZipCode().matches("\\d{5}-\\d{3}")) {
+            throw new BadRequestException("CEP inválido (formato XXXXX-XXX)");
+        }
+    }
+    public List<EnderecoDTO> getEnderecosByClienteId(Long id) {
+        // Buscar cliente pelo ID
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com ID: " + id));
+
+        // Retornar endereços associados ao cliente como DTO
+        return cliente.getEnderecos().stream()
+                .map(this::convertToDTO) // Certifique-se de que o método de conversão existe
+                .collect(Collectors.toList());
+    }
+
     // Converter DTO para Entidade
-    private Endereco convertToEntity(EnderecoDTO enderecoDTO) {
+    public Endereco convertToEntity(EnderecoDTO enderecoDTO) {
         Endereco endereco = new Endereco();
         endereco.setId(enderecoDTO.getId());
         endereco.setStreet(enderecoDTO.getStreet());
@@ -77,7 +138,7 @@ public class EnderecoService {
     }
 
     // Converter Entidade para DTO
-    private EnderecoDTO convertToDTO(Endereco endereco) {
+    public EnderecoDTO convertToDTO(Endereco endereco) {
         EnderecoDTO enderecoDTO = new EnderecoDTO();
         enderecoDTO.setId(endereco.getId());
         enderecoDTO.setStreet(endereco.getStreet());

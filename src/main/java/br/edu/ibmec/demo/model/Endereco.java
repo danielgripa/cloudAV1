@@ -31,6 +31,11 @@ public class Endereco {
     @Pattern(regexp = "\\d{5}-\\d{3}", message = "CEP deve seguir o padrão XXXXX-XXX")
     private String zipCode;
 
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
     // Construtor padrão
     public Endereco() {
     }
@@ -90,5 +95,13 @@ public class Endereco {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

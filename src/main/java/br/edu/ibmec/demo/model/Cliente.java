@@ -22,9 +22,9 @@ public class Cliente {
 
     private String phone;
 
-    @OneToMany
-    @JoinColumn(name = "cliente_id")
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Endereco> enderecos;
+
 
     // Construtor
     public Cliente() {
