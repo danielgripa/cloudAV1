@@ -1,15 +1,15 @@
 # CloudAV1
 
-Este é o repositório do projeto **CloudAV1**, que faz parte do desenvolvimento de um sistema de transações baseado em cloud. O projeto está disponível online para acesso através do link: [API-DOC](https://cloudav1-cyg2a3a7fpdfd4cw.canadacentral-01.azurewebsites.net/swagger-ui/index.html).
+Este é o repositório do projeto **CloudAV1**, uma aplicação desenvolvida para gerenciar clientes e endereços. O projeto está disponível online para acesso através do link: [API-DOC](https://cloudav1-cyg2a3a7fpdfd4cw.canadacentral-01.azurewebsites.net/swagger-ui/index.html).
 
 ## Sobre o Projeto
 
-O **CloudAV1** é uma aplicação desenvolvida para gerenciar transações financeiras de clientes, onde é possível realizar operações como cadastro de clientes, associar cartões e realizar transações entre contas. O objetivo principal do projeto é criar uma plataforma segura e eficiente para gerenciamento de transações, explorando tecnologias modernas para desenvolvimento de back-end e integração em nuvem.
+O **CloudAV1** é uma aplicação construída para gerenciar informações de clientes e seus endereços, oferecendo operações CRUD (Create, Read, Update, Delete) para ambas as entidades. O objetivo principal do projeto é fornecer uma plataforma eficiente e segura para o gerenciamento de dados de clientes, explorando tecnologias modernas para desenvolvimento de back-end e hospedagem em nuvem.
 
 ## Tecnologias Utilizadas
 
 - **Java (versão 21)**: Linguagem de programação principal utilizada para o desenvolvimento do back-end.
-- **Spring Boot**: Framework para construção da aplicação, fornecendo um conjunto robusto de funcionalidades para a criação de APIs REST.
+- **Spring Boot**: Framework utilizado para construção da aplicação, fornecendo um conjunto robusto de funcionalidades para a criação de APIs REST.
 - **Maven 3.3.4**: Ferramenta de automação de build e gerenciamento de dependências.
 - **Banco de Dados**: PostgreSQL ou MySQL (dependendo da configuração).
 - **Cloud Hosting**: O projeto está hospedado em ambiente de nuvem.
@@ -17,8 +17,8 @@ O **CloudAV1** é uma aplicação desenvolvida para gerenciar transações finan
 ## Funcionalidades
 
 1. **Gestão de Clientes**: Cadastro, atualização, exclusão e busca de clientes.
-2. **Gestão de Cartões**: Associação de cartões a clientes para realização de transações.
-3. **Transações Seguras**: Permite a realização de transações financeiras entre diferentes contas.
+2. **Gestão de Endereços**: Cadastro, atualização, exclusão e busca de endereços.
+3. **Associação Cliente-Endereço**: Permite associar múltiplos endereços a um cliente, assim como desassociar endereços existentes.
 
 ## Configuração do Ambiente de Desenvolvimento
 
