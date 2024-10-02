@@ -1,6 +1,6 @@
 # CloudAV1
 
-Este é o repositório do projeto **CloudAV1**, uma aplicação desenvolvida para gerenciar clientes e endereços. O projeto está disponível online para acesso através do link: [API-DOC](https://cloudav1-cyg2a3a7fpdfd4cw.canadacentral-01.azurewebsites.net/swagger-ui/index.html).
+Este é o repositório do projeto **CloudAV1**, uma aplicação desenvolvida para gerenciar clientes e endereços.
 
 ## Sobre o Projeto
 
